@@ -1,0 +1,79 @@
+service: aws-node-rest-api-typescript
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  environment:
+    NODE_ENV: dev
+
+plugins:
+  - serverless-plugin-typescript 
+  - serverless-offline
+
+package:
+  exclude:
+    - config/.env.stg
+    - config/.env.pro
+  include:
+    - config/.env.dev
+
+functions:
+  create:
+    handler: app/handler.create
+    events:
+      - http:
+          path: tasks
+          method: post
+  find:
+    handler: app/handler.find
+    events:
+      - http:
+          path: tasks
+          method: get
+  findById:
+    handler: app/handler.findById
+    events:
+      - http:
+          path: tasks/{id}
+          method: get
+  deleteById:
+    handler: app/handler.deleteById
+    events:
+      - http:
+          path: tasks/{id}
+          method: delete
+
+  createTaskList:
+    handler: app/handler.createTaskList
+    events:
+      - http:
+          path: taskLists
+          method: post
+
+  findAllTaskList:
+    handler: app/handler.findAllTaskList
+    events:
+      - http:
+          path: taskLists
+          method: get
+
+  findTaskListById:
+    handler: app/handler.findTaskListById
+    events:
+      - http:
+          path: taskLists/{id}
+          method: get
+
+  addTask:
+    handler: app/handler.addTask
+    events:
+      - http:
+          path: taskLists/{id}/task/add
+          method: POST
+
+  removeTask:
+    handler: app/handler.removeTask
+    events:
+      - http:
+          path: taskLists/{id}/task/remove
+          method: DELETE
